@@ -1,5 +1,15 @@
-# Data
+# Data (too large for git — share via Kaggle or cloud storage)
 /data/
+
+# Trained model artifacts (large binaries)
+models/*
+!models/.gitkeep
+*.pkl
+*.joblib
+*.h5
+*.pt
+*.pth
+*.onnx
 
 # Mac OS-specific storage files
 .DS_Store

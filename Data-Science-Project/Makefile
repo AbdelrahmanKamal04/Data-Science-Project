@@ -4,7 +4,8 @@
 
 PROJECT_NAME = Data-Science-Project
 PYTHON_VERSION = 3.10
-PYTHON_INTERPRETER = python
+PYTHON_INTERPRETER = poetry run python
+export PYTHONPATH := .
 
 #################################################################################
 # COMMANDS                                                                      #
@@ -43,7 +44,7 @@ format:
 ## Run tests
 .PHONY: test
 test:
-	python -m pytest tests
+	$(PYTHON_INTERPRETER) -m pytest tests
 
 
 ## Set up Python interpreter environment
@@ -65,7 +66,7 @@ create_environment:
 ## Make dataset
 .PHONY: data
 data: requirements
-	$(PYTHON_INTERPRETER) Data-Science-Module/dataset.py
+	$(PYTHON_INTERPRETER) Data_Science_Module/dataset.py
 
 
 #################################################################################

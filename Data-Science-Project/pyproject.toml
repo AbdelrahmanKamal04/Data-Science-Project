@@ -27,14 +27,20 @@ dependencies = [
     "ruff",
     "tqdm",
     "typer",
+    "pandas",
+    "numpy",
+    "scipy",
+    "scikit-learn",
+    "matplotlib",
+    "seaborn",
 ]
 requires-python = ">=3.10"
 
 
 [tool.ruff]
 line-length = 99
-src = ["Data-Science-Module"]
-include = ["pyproject.toml", "Data-Science-Module/**/*.py"]
+src = ["Data_Science_Module"]
+include = ["pyproject.toml", "Data_Science_Module/**/*.py"]
 
 [tool.ruff.lint]
 extend-select = ["I"]  # Add import sorting

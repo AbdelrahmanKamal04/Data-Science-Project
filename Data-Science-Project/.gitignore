@@ -1,8 +1,15 @@
-# Data (too large for git — share via Kaggle or cloud storage)
-/data/
+# ── Project-specific ──────────────────────────────────────────────────────────
 
-# Trained model artifacts (large binaries)
-models/*
+# Raw / processed data (large files — share via Kaggle or cloud storage)
+/data/raw/*
+/data/interim/*
+/data/processed/*
+/data/external/*
+# Keep directory structure in git
+!**/.gitkeep
+
+# Trained model artefacts (large binaries)
+/models/*
 !models/.gitkeep
 *.pkl
 *.joblib
@@ -10,6 +17,17 @@ models/*
 *.pt
 *.pth
 *.onnx
+
+# Generated report outputs
+/reports/**/*.json
+/reports/**/*.html
+/reports/figures/*
+!reports/figures/.gitkeep
+
+# Secrets — never commit
+.env
+.env.*
+!.env.example
 
 # Mac OS-specific storage files
 .DS_Store
@@ -155,7 +173,6 @@ celerybeat.pid
 *.sage.py
 
 # Environments
-.env
 .venv
 env/
 venv/

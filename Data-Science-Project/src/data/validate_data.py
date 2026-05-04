@@ -1,6 +1,14 @@
 import numpy as np
 import pandas as pd
 
+def validate_data(df):
+    """
+    Wrapper function to run all validation checks.
+    """
+    check_missing_values(df)
+    check_data_types(df)
+    check_duplicates(df)
+    fraud_analysis(df)
 
 def check_missing_values(df):
     """

@@ -2,31 +2,28 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 
-def interaction_analysis(df):
-    """
-    Perform interaction analysis between features.
-
-    Includes:
-        - Continuous vs continuous (with fraud separation)
-        - Categorical vs fraud relationships
-    """
+def interaction_analysis(df, pairs=None):
     print("Running Interaction Analysis...")
 
-    if {'amount', 'velocity_last_24h', 'is_fraud'}.issubset(df.columns):
-        interaction_continuous(df, 'amount', 'velocity_last_24h')
+    if pairs is None:
+        pairs = [
+            ('amount', 'velocity_last_24h'),
+            ('log_amount', 'velocity_last_24h')
+        ]
 
-    if {'merchant_category', 'is_fraud'}.issubset(df.columns):
-        interaction_categorical(df, 'merchant_category', 'is_fraud')
+    for x, y in pairs:
+        if x in df.columns and y in df.columns:
+            interaction_continuous(df, x, y)
 
 
 def interaction_continuous(df, x, y):
-    """
-    Plot interaction between two continuous features.
-    """
-    sns.lmplot(x=x, y=y, hue='is_fraud', data=df)
+    sns.scatterplot(x=x, y=y, hue='is_fraud', data=df)
     plt.title(f'{x} vs {y}')
     plt.show()
 
+    sns.regplot(x=x, y=y, data=df, scatter_kws={'alpha': 0.3})
+    plt.title(f'Regression: {x} vs {y}')
+    plt.show()
 
 def interaction_categorical(df, col1, col2):
     """

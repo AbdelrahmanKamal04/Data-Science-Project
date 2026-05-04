@@ -3,31 +3,30 @@ import pandas as pd
 import seaborn as sns
 
 
-def bivariate_continuous_analysis(df_orig, df_smote):
+def bivariate_continuous_analysis(df_orig, df_smote=None, cols=None):
     """
     Perform bivariate analysis on continuous features.
 
     Includes:
-        - Distribution comparison (Original vs SMOTE)
+        - Distribution comparison (Original vs SMOTE if provided)
         - Feature relationships (scatter + regression)
+        - Boxplots vs target
     """
-    print("Running Bivariate Continuous Analysis...")
+    print("Running Bivariate Continuous Analysis")
 
-    cols = get_continuous_columns(df_orig)
+    if cols is None:
+        cols = get_continuous_columns(df_orig)
+
     print(f"Detected continuous columns: {cols}")
 
-    compare_continuous_distributions(df_orig, df_smote, cols)
+    if df_smote is not None:
+        compare_continuous_distributions(df_orig, df_smote, cols)
 
-    pairs = [(cols[i], cols[j]) for i in range(len(cols)) for j in range(i + 1, len(cols))]
-    pairs = pairs[:5]
-
-    plot_continuous_relationships(df_orig, pairs)
+    plot_continuous_relationships(df_orig, cols)
+    plot_boxplots_vs_target(df_orig, cols)
 
 
 def compare_continuous_distributions(df_orig, df_smote, cols):
-    """
-    Compare feature distributions between original and SMOTE datasets.
-    """
     for col in cols:
         fig, axes = plt.subplots(1, 2, figsize=(12, 4))
 
@@ -41,10 +40,10 @@ def compare_continuous_distributions(df_orig, df_smote, cols):
         plt.show()
 
 
-def plot_continuous_relationships(df, pairs):
-    """
-    Plot relationships between continuous feature pairs.
-    """
+def plot_continuous_relationships(df, cols):
+    pairs = [(cols[i], cols[j]) for i in range(len(cols)) for j in range(i + 1, len(cols))]
+    pairs = pairs[:5]
+
     for col1, col2 in pairs:
         sns.scatterplot(x=col1, y=col2, hue='is_fraud', data=df)
         plt.title(f'{col1} vs {col2}')
@@ -55,10 +54,17 @@ def plot_continuous_relationships(df, pairs):
         plt.show()
 
 
+def plot_boxplots_vs_target(df, cols):
+    if 'is_fraud' not in df.columns:
+        return
+
+    for col in cols:
+        sns.boxplot(x='is_fraud', y=col, data=df)
+        plt.title(f'{col} vs Fraud')
+        plt.show()
+
+
 def get_continuous_columns(df, threshold=10):
-    """
-    Detect continuous numerical columns automatically.
-    """
     return [
         col for col in df.columns
         if pd.api.types.is_numeric_dtype(df[col]) and df[col].nunique() > threshold

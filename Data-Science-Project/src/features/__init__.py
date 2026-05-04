@@ -9,6 +9,7 @@ from .scaling import scale_features
 from .split import split_data
 from .save import save_data
 from .validation import validate_splits
+from .utils import get_numerical_columns
 
 __all__ = [
     'encode_features',
@@ -16,5 +17,6 @@ __all__ = [
     'scale_features',
     'split_data',
     'save_data',
-    'validate_splits'
+    'validate_splits',
+    'get_numerical_columns'
 ]

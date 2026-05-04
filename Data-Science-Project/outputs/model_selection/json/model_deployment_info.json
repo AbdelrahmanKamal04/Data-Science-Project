@@ -21,7 +21,7 @@
   ],
   "feature_count": 16,
   "scaling": "StandardScaler (already applied)",
-  "date_trained": "2026-05-04 13:14:43",
+  "date_trained": "2026-05-04 22:56:06",
   "performance": {
     "f1_score": 0.7213114754098361,
     "roc_auc": 0.9970288874507266,

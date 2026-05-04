@@ -94,7 +94,7 @@ def plot_data_quality(df):
         sns.histplot(df[df['is_fraud'] == 1]['amount'], label='Fraud', ax=axes[3, 0])
         axes[3, 0].legend()
         axes[3, 0].set_title('Amount Distribution by Class')
-
+    
     if 'transaction_hour' in df.columns:
         sns.countplot(x='transaction_hour', data=df, ax=axes[3, 1])
 

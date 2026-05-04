@@ -3,7 +3,7 @@
 #################################################################################
 
 PROJECT_NAME        = Data-Science-Project
-PYTHON_VERSION      = 3.10
+PYTHON_VERSION      = 3.11
 PYTHON_INTERPRETER  = poetry run python
 MODULE              = Data_Science_Module
 export PYTHONPATH  := .

@@ -39,6 +39,12 @@ dependencies = [
     "python-dotenv>=1.0,<2.0",
     "tqdm>=4.66,<5.0",
     "typer>=0.12,<1.0",
+
+    # modelling
+    "xgboost>=2.0.0,<3.0",
+    "lightgbm>=4.0.0,<5.0",
+    "imbalanced-learn>=0.11.0,<0.12.0", 
+    "mlflow>=2.8.0,<3.0",   
 ]
 
 # ── Dev / CI dependencies ─────────────────────────────────────────────────────

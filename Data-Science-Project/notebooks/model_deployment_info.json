@@ -1,0 +1,30 @@
+{
+  "model_name": "LightGBM_v1",
+  "run_id": "d0bc8c775e76479c894882c279349a60",
+  "expected_features": [
+    "cardholder_age",
+    "device_trust_score",
+    "foreign_transaction",
+    "high_risk_abroad",
+    "is_high_velocity_low_trust",
+    "is_night_transaction",
+    "location_mismatch",
+    "log_amount",
+    "merchant_category_Electronics",
+    "merchant_category_Food",
+    "merchant_category_Grocery",
+    "merchant_category_Travel",
+    "relevant_amount",
+    "transaction_hour",
+    "velocity_last_24h",
+    "velocity_per_hour"
+  ],
+  "feature_count": 16,
+  "scaling": "StandardScaler (already applied)",
+  "date_trained": "2026-05-04 08:08:10",
+  "performance": {
+    "f1_score": 0.7213114754098361,
+    "roc_auc": 0.9970288874507266,
+    "recall": 0.9565217391304348
+  }
+}

@@ -71,7 +71,7 @@ def plot_data_quality(df):
         axes[0, 1].set_title('Fraud Rate by Category')
 
     if 'device_trust_score' in df.columns:
-        sns.kdeplot(df['device_trust_score'], ax=axes[1, 0])
+        sns.kdeplot(df['device_trust_score'], ax=axes[1, 0] , clip=(25,99))
         axes[1, 0].set_title('Device Trust Score Distribution')
 
     if 'transaction_hour' in df.columns and 'is_fraud' in df.columns:

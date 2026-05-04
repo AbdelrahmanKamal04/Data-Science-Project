@@ -1,5 +1,19 @@
 import pandas as pd
 
+def encode_features(train, val, test, columns):
+    """
+    Apply one-hot encoding to specified columns and align splits.
+
+    Args:
+        train, val, test (pd.DataFrame): Dataset splits.
+        columns (list): Columns to encode.
+    Returns:
+        tuple: Encoded (train, val, test)
+    """ 
+    # use existing functions below 
+    for col in columns:
+        train, val, test = one_hot_encode(train, val, test, col)
+    return train, val, test
 
 def one_hot_encode(train, val, test, column):
     """

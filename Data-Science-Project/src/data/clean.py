@@ -1,5 +1,19 @@
 import pandas as pd
 
+def clean_data(df):
+    """
+    Clean the dataset by handling missing values, removing duplicates, and fixing data types.
+
+    Args:
+        df (pd.DataFrame): Input dataset.
+    Returns:
+        pd.DataFrame: Cleaned dataset.
+    """
+    df = handle_missing_values(df)
+    df = remove_duplicates(df)
+    df = fix_data_types(df)
+
+    return df
 
 def handle_missing_values(df):
     """
@@ -53,26 +67,6 @@ def fix_data_types(df):
     df['is_fraud'] = df['is_fraud'].astype(int)
 
     return df
-
-
-def clean_data(df):
-    """
-    Full data cleaning pipeline.
-
-    Steps:
-        - handle missing values
-        - remove duplicates
-        - fix data types
-
-    Returns:
-        pd.DataFrame: cleaned dataset
-    """
-    df = handle_missing_values(df)
-    df = remove_duplicates(df)
-    df = fix_data_types(df)
-
-    return df
-
 
 def save_clean_data(df, path):
     """

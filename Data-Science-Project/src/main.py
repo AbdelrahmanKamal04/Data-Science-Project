@@ -1,19 +1,15 @@
-from data.load_data import load_data_csv
+from data.clean import clean_data
+from data.clean import save_clean_data
 from data.inspect_data import basic_inspection
-from data.validate_data import (
-    check_missing_values,
-    check_data_types,
-    check_duplicates,
-    fraud_analysis
-)
-from data.clean_data import clean_data, save_clean_data
+from data.load_data import load_data_csv
+from data.validate import validate_data
 
-from features.split import split_data
-from features.engineering import compute_training_statistics, apply_feature_engineering
-from features.encoding import one_hot_encode
+from features.encoding import encode_features
+from features.engineering import engineer_features
+from features.save import save_data
 from features.scaling import scale_features
+from features.split import split_data
 from features.validation import validate_splits
-from features.save_data import save_datasets, save_scaler
 
 
 RANDOM_STATE = 42
@@ -49,10 +45,7 @@ def main():
     df = load_data_csv("../data/raw/credit_card_fraud_10k.csv")
 
     basic_inspection(df)
-    check_missing_values(df)
-    check_data_types(df)
-    check_duplicates(df)
-    fraud_analysis(df)
+    validate_data(df)
 
     df = clean_data(df)
     save_clean_data(df, "../data/interim/cleaned/credit_card_fraud_10k_cleaned.csv")
@@ -61,13 +54,8 @@ def main():
 
     validate_splits(X_train, X_val, X_test, y_train, y_val, y_test)
 
-    stats = compute_training_statistics(X_train)
-
-    X_train = apply_feature_engineering(X_train, stats)
-    X_val = apply_feature_engineering(X_val, stats)
-    X_test = apply_feature_engineering(X_test, stats)
-
-    X_train, X_val, X_test = one_hot_encode(X_train, X_val, X_test, column="merchant_category")
+    X_train, X_val, X_test = engineer_features(X_train, X_val, X_test)
+    X_train, X_val, X_test = encode_features(X_train, X_val, X_test, column="merchant_category")
 
     num_cols = [
         'transaction_hour',
@@ -81,8 +69,7 @@ def main():
 
     X_train, X_val, X_test, scaler = scale_features(X_train, X_val, X_test, num_cols)
 
-    save_datasets(X_train, X_val, X_test, y_train, y_val, y_test)
-    save_scaler(scaler)
+    save_data(X_train, X_val, X_test, y_train, y_val, y_test, scaler)
 
     print("\nFull pipeline executed successfully.")
 

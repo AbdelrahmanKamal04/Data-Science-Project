@@ -1,5 +1,22 @@
 import numpy as np
 
+def engineer_features(X_train, X_val, X_test):
+    """
+    Perform feature engineering on training and test datasets.
+
+    Args:
+        X_train (pd.DataFrame): Training feature set.
+        X_val (pd.DataFrame): Validation feature set.
+        X_test (pd.DataFrame): Test feature set.
+    Returns:
+        tuple: Transformed X_train, X_val, and X_test.
+    """
+    stats = compute_training_statistics(X_train)
+
+    X_train_transformed = apply_feature_engineering(X_train, stats)
+    X_val_transformed = apply_feature_engineering(X_val, stats)
+    X_test_transformed = apply_feature_engineering(X_test, stats)
+    return X_train_transformed, X_val_transformed, X_test_transformed
 
 def compute_training_statistics(X_train):
     """

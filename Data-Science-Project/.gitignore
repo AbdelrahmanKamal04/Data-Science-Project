@@ -17,6 +17,7 @@
 *.pt
 *.pth
 *.onnx
+mlruns/
 
 # Generated report outputs
 /reports/**/*.json

@@ -1,0 +1,2 @@
+recommended_model,run_id,f1_score,roc_auc,recall,precision,fraud_detection_rate,total_business_cost,potential_savings,roi_percentage
+LightGBM_v1,d0bc8c775e76479c894882c279349a60,0.7213114754098361,0.9970288874507266,0.9565217391304348,0.5789473684210527,95.65,310,4240,1367.74

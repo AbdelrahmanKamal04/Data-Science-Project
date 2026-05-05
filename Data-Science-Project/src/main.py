@@ -11,7 +11,6 @@ from features.split import split_data
 from features.validation import validate_splits
 from features.utils import get_numerical_columns
 
-# PRE-FE EDA
 from visualizations.data_loader import load_datasets
 from visualizations.univariate import univariate_analysis
 from visualizations.bivariate_continuous import bivariate_continuous_analysis
@@ -19,12 +18,12 @@ from visualizations.bivariate_categorical import bivariate_categorical_analysis
 from visualizations.multivariate import multivariate_analysis
 from visualizations.interaction import interaction_analysis
 
-# POST-FE EDA
 from visualizations.bivariate_ohe import ohe_category_analysis
 from visualizations.feature_interactions_advanced import conditional_fraud_analysis
 from visualizations.risk_analysis import risk_hotspot_analysis
 
 import pandas as pd
+import argparse
 
 RANDOM_STATE = 42
 
@@ -109,7 +108,7 @@ def main(run_eda: bool = False):
         X_train,
         X_val,
         X_test,
-        column="merchant_category"
+        columns=["merchant_category"]
     )
 
     num_cols = get_numerical_columns(
@@ -144,4 +143,12 @@ def main(run_eda: bool = False):
 
 
 if __name__ == "__main__":
-    main(run_eda=True)
+    parser = argparse.ArgumentParser(description="Run the Data Science Preprocessing Pipeline")
+    parser.add_argument(
+        "--eda", 
+        action="store_true", 
+        help="Run EDA visualizations before and after feature engineering"
+    )
+    args = parser.parse_args()
+
+    main(run_eda=args.eda)

@@ -67,9 +67,8 @@ def apply_feature_engineering(df, stats):
     ).astype(int)
 
     df['relevant_amount'] = df['amount'] / (
-        df['merchant_category']
-        .map(stats["avg_merchant_amount"])
-        .fillna(stats["global_avg_amount"]) + 1e-6
+        df['merchant_category'].astype(str).map(stats["avg_merchant_amount"])
+        .fillna(stats["global_avg_amount"]).astype(float) + 1e-6
     )
 
     return df

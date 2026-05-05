@@ -7,7 +7,7 @@
 Fraud Detection Machine Learning Project - A comprehensive data science project for detecting credit card fraud using advanced ML techniques.
 
 ## Project Organization
-.
+```
 ├── LICENSE <- Open-source license if one is chosen (MIT, Apache 2.0, etc.)
 ├── Makefile <- Makefile with convenience commands like make data, make train, make test
 ├── README.md <- The top-level README for developers using this project
@@ -197,7 +197,7 @@ Fraud Detection Machine Learning Project - A comprehensive data science project 
 ├── risk_analysis.py <- Risk analysis visualizations
 ├── temporal.py <- Time-series and temporal visualizations
 └── univariate.py <- Univariate distribution plots
-
+```
 
 ## Quick Start
 

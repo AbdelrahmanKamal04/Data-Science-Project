@@ -25,19 +25,20 @@ setup: create_environment requirements
 .PHONY: create_environment
 create_environment:
 	@echo ">>> Creating Poetry environment (Python $(PYTHON_VERSION))..."
-	poetry env use $(PYTHON_VERSION)
+	poetry env use $(PYTHON_VERSION) || true
 	@echo ">>> Activate with: poetry shell"
 
 ## Install all dependencies (runtime + dev) from pyproject.toml
 .PHONY: requirements
 requirements:
-	poetry install --with dev
+	poetry install --with dev --no-interaction
 	@echo ">>> Dependencies installed."
 
 ## Install runtime dependencies only (for CI / production)
 .PHONY: requirements-prod
 requirements-prod:
-	poetry install --without dev
+	poetry install --without dev --no-root --no-interaction
+	@echo ">>> Production dependencies installed."
 
 ## Install using pip (alternative to Poetry)
 .PHONY: pip-install
@@ -51,7 +52,7 @@ pip-install:
 
 ## Run all 8-dimension data validation checks and save JSON report
 .PHONY: validate
-validate:
+validate: requirements
 	@echo ">>> Running data validation..."
 	@mkdir -p $(REPORTS_DIR)
 	$(PYTHON_INTERPRETER) -m $(MODULE).validate
@@ -69,21 +70,25 @@ all: data features train
 ## Merge raw transaction + identity files, then validate
 .PHONY: data
 data: requirements
+	@echo ">>> Running data preparation..."
 	$(PYTHON_INTERPRETER) -m $(MODULE).dataset
 
 ## Engineer features (writes to data/interim and data/processed)
 .PHONY: features
-features:
+features: requirements
+	@echo ">>> Running feature engineering..."
 	$(PYTHON_INTERPRETER) -m $(MODULE).features
 
 ## Train model (writes artefacts to models/)
 .PHONY: train
-train:
+train: requirements
+	@echo ">>> Training model..."
 	$(PYTHON_INTERPRETER) -m $(MODULE).modeling.train
 
 ## Run predictions with the trained model
 .PHONY: predict
-predict:
+predict: requirements
+	@echo ">>> Running predictions..."
 	$(PYTHON_INTERPRETER) -m $(MODULE).modeling.predict
 
 #################################################################################
@@ -104,7 +109,7 @@ format:
 
 ## Run test suite with coverage report
 .PHONY: test
-test:
+test: requirements
 	$(PYTHON_INTERPRETER) -m pytest tests/ --cov=$(MODULE) --cov-report=term-missing
 
 #################################################################################
@@ -115,23 +120,23 @@ test:
 .PHONY: clean
 clean:
 	find . -type f -name "*.py[co]" -delete
-	find . -type d -name "__pycache__" -delete
-	find . -type d -name ".pytest_cache" -delete
-	find . -type d -name ".ruff_cache" -delete
-	find . -type d -name "*.egg-info" -delete
+	find . -type d -name "__pycache__" -exec rm -rf {} + 2>/dev/null || true
+	find . -type d -name ".pytest_cache" -exec rm -rf {} + 2>/dev/null || true
+	find . -type d -name ".ruff_cache" -exec rm -rf {} + 2>/dev/null || true
+	find . -type d -name "*.egg-info" -exec rm -rf {} + 2>/dev/null || true
 	@echo ">>> Clean complete."
 
 ## Remove generated reports (keeps directory structure)
 .PHONY: clean-reports
 clean-reports:
-	find $(REPORTS_DIR) -name "*.json" -delete
-	find $(REPORTS_DIR)/figures -type f -delete
+	find $(REPORTS_DIR) -name "*.json" -delete 2>/dev/null || true
+	find $(REPORTS_DIR)/figures -type f -delete 2>/dev/null || true
 	@echo ">>> Reports cleared."
 
 ## Remove trained model artefacts
 .PHONY: clean-models
 clean-models:
-	find models/ -type f ! -name ".gitkeep" -delete
+	find models/ -type f ! -name ".gitkeep" -delete 2>/dev/null || true
 	@echo ">>> Models cleared."
 
 #################################################################################
@@ -140,14 +145,7 @@ clean-models:
 
 .DEFAULT_GOAL := help
 
-define PRINT_HELP_PYSCRIPT
-import re, sys
-lines = '\n'.join([line for line in sys.stdin])
-matches = re.findall(r'\n## (.*)\n[\s\S]+?\n([a-zA-Z_-]+):', lines)
-print('Available rules:\n')
-print('\n'.join(['{:25}{}'.format(*reversed(match)) for match in matches]))
-endef
-export PRINT_HELP_PYSCRIPT
-
+.PHONY: help
 help:
-	@$(PYTHON_INTERPRETER) -c "$$PRINT_HELP_PYSCRIPT" < $(MAKEFILE_LIST)
+	@echo "Available rules:"
+	@grep -h '^## ' $(MAKEFILE_LIST) | grep -v grep | sed 's/## //' | awk -F':' '{printf "  %-25s %s\n", $$2, $$1}' | sort
